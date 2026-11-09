@@ -1,0 +1,37 @@
+Machine Learning Overview
+
+Machine learning uses data to improve a model's predictions. In supervised learning, examples include both inputs and correct answers. A model trained to classify emails may use messages labeled "spam" or "not spam". During training, its parameters are adjusted to reduce prediction errors.
+
+In unsupervised learning, examples do not have answer labels. Clustering groups similar items, such as customers with similar purchasing behavior. Reinforcement learning instead uses feedback from actions and rewards to improve a policy over time.
+
+Training data teaches a model; validation data helps choose settings; test data checks performance on examples the model did not learn from. Data leakage happens when information from validation or test examples accidentally influences training. It can make reported performance look better than real-world performance.
+
+An embedding model maps text to numerical vectors. Similar meanings often produce nearby vectors. Creating embeddings for a RAG index normally does not retrain the language model: the vectors are stored separately and retrieved when a user asks a question.
+
+What the model learns
+
+A model contains adjustable parameters. Training repeatedly compares predictions with known targets and updates those parameters to reduce a loss function. In a simple linear model, parameters might be coefficients attached to input features. In a neural network, many layers of weights transform inputs into outputs. More parameters do not automatically guarantee better results; the task, data quality, training method, and evaluation all matter.
+
+Features and labels
+
+Features are the input signals used for a prediction. In a house-price example, features might include floor area, neighborhood, and age of the building. The target or label is the known sale price. A classification task predicts a category such as spam or not spam, while a regression task predicts a numerical value such as price. Good features help capture relevant patterns; irrelevant or misleading features can make a model less useful.
+
+Generalization and overfitting
+
+A useful model performs well on new examples, not only on records it saw during training. Overfitting happens when the model memorizes details or noise in the training set and performs poorly on unseen data. Underfitting happens when the model is too simple or insufficiently trained to capture meaningful patterns. Regularization, more representative data, early stopping, and careful model selection can improve generalization.
+
+Evaluation measures
+
+Accuracy is the share of predictions that are correct, but it can be misleading when one class is rare. For fraud detection, a model that always predicts "not fraud" may have high accuracy while missing every fraudulent transaction. Precision asks what fraction of predicted positives were truly positive. Recall asks what fraction of actual positives were found. A confusion matrix shows correct and incorrect predictions for each class. The right metric depends on the cost of different mistakes.
+
+Data preparation
+
+Real data may contain missing fields, inconsistent formats, duplicate records, or outdated information. Data preparation can include cleaning, normalization, and selecting appropriate features. Numerical values are sometimes scaled so one large-valued feature does not dominate training. Text can be transformed into tokens, word counts, or embeddings. Preparation steps must be fitted using training data only when they learn statistics from the dataset, otherwise information may leak from validation or test examples.
+
+Embeddings and semantic similarity
+
+An embedding represents an item with a vector of numbers. Texts about similar ideas can have nearby vectors even if they use different words. A vector database can compare a question embedding with stored document embeddings and retrieve likely relevant passages. The quality of these results depends on the embedding model, the documents, the chunk boundaries, and the search method. Semantic similarity is useful, but a nearby vector is not proof that a passage answers a question correctly.
+
+Training compared with RAG
+
+Training changes model parameters. Fine-tuning starts with a trained model and updates some parameters using additional examples. RAG usually leaves model parameters unchanged: it searches an external collection and supplies retrieved passages as context at inference time. If a company's policy document changes, updating the RAG index can make the new text available without retraining the language model. The application still needs to check that retrieved passages are relevant and current.

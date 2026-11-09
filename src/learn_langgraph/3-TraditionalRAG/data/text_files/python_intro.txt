@@ -1,0 +1,37 @@
+Python Basics for Beginners
+
+Python is a programming language often used for automation, data analysis, and AI applications. A variable stores a value, such as a name or a number. For example, city = "Vancouver" stores a string, while temperature = 18 stores an integer.
+
+A function groups reusable code. The function def greet(name): can return a message based on the name passed to it. A list keeps an ordered collection of items, such as ["apple", "banana"]. A dictionary maps keys to values, such as {"city": "Vancouver", "country": "Canada"}.
+
+Python uses indentation to mark blocks of code. A for loop can visit every item in a list. For example, for fruit in fruits: processes one fruit at a time. Errors can be handled with try and except so a program can recover or report what went wrong.
+
+In a RAG project, Python can load documents, split them into chunks, generate embeddings, query a vector store, and send retrieved context to a language model.
+
+Variables and data types
+
+Python has several common built-in types. A string represents text, an integer represents a whole number, and a float represents a number with a decimal point. A boolean is either True or False. You can inspect a value with type(value). Python assigns types to values at runtime, so the same variable name can refer to different kinds of values at different times. In most projects, clear and consistent types make code easier to maintain.
+
+Collections and indexing
+
+A list is ordered and can change after creation. For example, tasks = ["load", "split", "embed"] contains three steps. tasks[0] returns "load" because indexing starts at zero. A tuple is also ordered, but its elements cannot be reassigned. A set keeps unique values. A dictionary stores key-value pairs and is useful when each value has a name. For example, document = {"title": "Guide", "pages": 4} lets you access document["title"] to get "Guide". The get method, document.get("author"), returns None when the key is missing instead of raising a KeyError.
+
+Conditions and loops
+
+An if statement runs a block only when its condition is true. For example, if temperature > 25: can select a message for a warm day. An elif block checks another condition, and an else block handles the remaining cases. A for loop iterates over a sequence; a while loop repeats while a condition remains true. The built-in enumerate function supplies both an index and an item when looping through a list.
+
+Functions and return values
+
+A function receives inputs called parameters and can return an output. For example, def add(a, b): followed by return a + b defines a reusable calculation. If a function does not explicitly return a value, it returns None. A type hint such as def add(a: int, b: int) -> int: documents the intended input and output types. Type hints improve editor assistance, but ordinary Python does not automatically enforce them at runtime.
+
+Files and paths
+
+The pathlib module makes file operations readable. Path("notes.txt").read_text(encoding="utf-8") reads a text file, while Path("notes.txt").write_text("Hello", encoding="utf-8") writes one. A relative path is resolved from the program's current working directory, which can differ from the directory containing the script. This matters when loading a folder of RAG documents: running the same script from another terminal directory may change what a relative path points to.
+
+Errors and debugging
+
+An exception reports that an operation failed. A missing file can raise FileNotFoundError, and looking up a missing dictionary key can raise KeyError. A try block can catch a specific exception and handle it. Catching every exception without recording it can hide defects, so it is usually better to show the error during development. Printing intermediate values, inspecting types, and reading the final line of a traceback often reveal the cause quickly.
+
+Modules and environments
+
+Python files can import functions and classes from modules. Third-party packages must be installed in the Python environment that runs the program. A virtual environment keeps project dependencies separate from system packages. If an import works in a terminal but appears unresolved in an editor, check that both are using the same Python interpreter.

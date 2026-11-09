@@ -1,0 +1,37 @@
+Retrieval-Augmented Generation (RAG)
+
+RAG helps a language model answer questions using relevant external documents. During ingestion, a pipeline loads source files, splits their text into smaller chunks, creates an embedding for each chunk, and stores the chunks and vectors in a searchable index. Metadata such as source filename, author, and page number can be stored with each chunk.
+
+At question time, the same embedding model converts the user's question into a vector. A vector search finds chunks with similar meaning. The application then places those chunks in the model's context and asks it to answer using the retrieved information. The response can cite the source filename or page when that metadata is available.
+
+For example, a question about Python dictionaries should retrieve python_intro.txt. A question about supervised learning should retrieve machine_learning.txt. A question about chunking or vector search should retrieve this file.
+
+RAG does not guarantee correctness. Poor source documents, oversized chunks, irrelevant retrieval results, or stale information can lead to weak answers. It is useful to inspect retrieved chunks, include source references, and evaluate whether the answer is supported by the text.
+
+Step 1: Loading and cleaning
+
+The ingestion process begins with source documents such as text files, PDFs, web pages, or database records. A loader extracts their content into a consistent document representation. Cleaning may remove repeated page headers, navigation menus, or empty lines. It should preserve facts, headings, and source information needed for later citations. Each document can carry metadata such as a filename, section title, timestamp, or access category.
+
+Step 2: Chunking
+
+Long documents are divided into smaller chunks so retrieval can locate a precise passage. A chunk can be a paragraph, a section, or a fixed-size span of text. Some splitters include an overlap between neighboring chunks so a sentence near a boundary retains context. Very small chunks may lose important explanations; very large chunks may mix unrelated topics and waste the model's context window. A practical experiment is to compare retrieved passages at several chunk sizes using the same sample questions.
+
+Step 3: Embeddings and indexing
+
+An embedding model converts each chunk into a vector. The vector store keeps the vector together with the chunk text and useful metadata, or a reference to where the text can be loaded. An index makes similarity search efficient. The query must be embedded with a model compatible with the stored vectors. If the embedding model changes, existing document vectors generally need to be regenerated before they can be compared meaningfully with new question vectors.
+
+Step 4: Retrieval
+
+When a user asks a question, the application creates a query embedding and asks the index for relevant chunks. A similarity search may return the top k nearest passages. Metadata filters can narrow the search to one source, author, date, or tenant. Some systems combine keyword search with vector search to handle exact names and identifiers as well as semantic matches. A reranker can then reorder a short candidate list using a more detailed relevance model.
+
+Step 5: Answer generation
+
+The application sends the user question and selected chunks to a language model. A prompt can ask the model to ground its answer in those chunks, cite sources, and say when the retrieved material does not contain the answer. Retrieved text is context, not a command: instructions embedded in documents should not be treated as authority over the application. The final answer should be checked against the cited passages when accuracy matters.
+
+Keeping the index current
+
+If a source file changes, its old chunks may need to be deleted and new chunks indexed. Stable document IDs can help connect stored chunks to the original file. Re-indexing without removing old versions may cause contradictory passages to appear together. Metadata such as updated_at can help with freshness checks, but it does not by itself verify that a retrieved fact is still true.
+
+Measuring retrieval quality
+
+A useful RAG evaluation set contains questions, expected source passages, and answers supported by those passages. First check retrieval: did the correct chunk appear among the candidates? Then check generation: did the final answer use the evidence accurately? If retrieval fails, changing the prompt alone will rarely fix the underlying problem. Inspect chunk boundaries, search filters, embedding quality, and source coverage before tuning the answer style.
