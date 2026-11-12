@@ -12,3 +12,6 @@ mcp
 langchain-core
 pypdf
 pymupdf
+sentence-transformers
+faiss-cpu
+chromadb
